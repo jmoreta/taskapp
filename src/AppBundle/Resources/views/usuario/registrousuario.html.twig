@@ -1,0 +1,114 @@
+{% extends "base.html.twig" %}
+
+{% block titulo %}Registro{% endblock %}
+
+
+{% block body %}
+
+    <style>
+        .container {
+            margin: 25px 25px 25px 25px;
+            padding-left: 5px;
+
+        }
+
+        label {
+            padding-left: 2px;
+
+        }
+    </style>
+
+
+
+
+    <div class="form-group">
+        <h2>Registro de Usuarios</h2>
+
+
+        <label >Email:</label>
+        <div >
+            <input type="email" id="email">
+        </div>
+        <label >Nombre:</label>
+        <div >
+            <input type="text" id="name">
+        </div>
+
+        <Label >Tipo de usuario:</Label>
+        <div >
+            <select name="tipousuario" id="tipo">
+                <option value="Normal">Normal</option>
+                <option value="Tecnico">Tecnico</option>
+            </select>
+        </div>
+
+        <label >Password:</label>
+        <div >
+            <input type="password" id="password">
+        </div>
+
+        <label >Confirmar password:</label>
+        <div >
+            <input type="password" id="repass">
+        </div>
+
+
+        <div>
+            <button type="button" class="btn btn-primary" onclick="registro()">Registrar</button>
+
+        </div>
+
+    </div>
+
+    <script>
+        function registro(){
+
+
+         var name= $('#name').val();
+         var email=$('#email').val();
+         var tipo=$('#tipo').val();
+         var pass=$('#password').val();
+         // var pass2=$('#repass').val();
+
+            var data = {
+                name:name,
+                username: email,
+                tipousuario: tipo,
+                contrasena: pass,
+
+            };
+
+            $.ajax ({
+                url:Routing.generate('guardar_usuario'),
+                type:'POST',
+                data:JSON.stringify(data),
+                success:function(response){
+                    console.log(response);
+                },
+                error:function(err){
+                    console.log(err.responseText);
+                }
+
+                });
+
+
+                    }
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

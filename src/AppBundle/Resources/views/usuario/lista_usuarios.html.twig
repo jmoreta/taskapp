@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+    {% block titulo %}
+      Users
+    {% endblock %}
+
+    {% block body %}
+
+        <table class="table">
+        <thead>
+        <tr>
+            <th > Nombre </th>
+            <th >Username</th>
+            <th >Acciones</th>
+        </tr>
+        </thead>
+
+           <tbody>
+
+           <h1>Lista de Usuarios</h1>
+
+                {% for usuario in usuarios %}
+                    <tr>
+
+                        <td>{{ usuario.name }}<td>
+                        <td>{{ usuario.username }}</td>
+
+                        <td>
+                            <a class="btn btn-success" href="{{ path('editar_usuario',{'id':usuario.id}) }}">Editar</a>
+                            <a class="btn btn-danger" onclick="eliminar('{{ usuario.id }}')">Eliminar</a>
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+           </tbody>
+        </table>
+
+
+         <script>
+            function eliminar(id){
+                
+                $.ajax({
+                    url:Routing.generate('eliminar_usuario', { id: id }),
+                    type: 'DELETE',
+                    success: function (response) {
+                    console.log(response);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        }
+                });
+
+               }
+                </script>
+
+
+
+
+
+    {% endblock %}
+
+{% block activeuser %}class="active" {% endblock %}
