@@ -64,6 +64,9 @@ class Tickets
     private $estado;
 
 
+
+
+
     /**
      * Get id
      *

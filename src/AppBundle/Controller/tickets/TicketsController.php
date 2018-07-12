@@ -39,18 +39,21 @@ class TicketsController extends Controller
     //Restfull API
 
     /**
-     * @Route("/rest/tickets",name="nuevo_tickets",options={'expose'=true})
+     * @Route("/rest/tickets",name="nuevo_tickets",options={"expose"=true})
      * @Method("POST")
      */
     public function nuevoTicket(Request $request)
     {
         $data = $request->getContent();
-        $data = json_decode($data, 'json');
+        $data = json_decode($data, true);
+
+
 
 
         $tickets = new Tickets();
-        $form = $this->createForm(TicketsType::class, $tickets);
+        $form = $this->createForm(TicketsType::class,$tickets);
         $form->submit($data);
+
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -61,6 +64,9 @@ class TicketsController extends Controller
         return new JsonResponse(null, 400);
 
     }
+
+
+
 
 
 }
