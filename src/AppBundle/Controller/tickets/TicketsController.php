@@ -9,36 +9,56 @@
 namespace AppBundle\Controller\tickets;
 
 use AppBundle\Entity\Tickets;
-
-
-use AppBundle\Entity\Usuario;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serialize;
-use \DateTime;
-
+use AppBundle\Form\TicketsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serialize;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class TicketsController extends Controller
 {
-//lista tickets en la vista
 
     /**
      * @Route("/tickets",name="lista_tickets")
      */
     public function indexTicket()
     {
-        $tickets=$this->getDoctrine()->getRepository(Tickets::class)
+        $tickets = $this->getDoctrine()->getRepository(Tickets::class)
             ->findAll();
 
         return $this->render("@App/tickets/listado_tickets.html.twig",
-                ["tickets"=>$tickets]
-            );
+            ["tickets" => $tickets]
+        );
+    }
+
+    //Restfull API
+
+    /**
+     * @Route("/rest/tickets",name="nuevo_tickets",options={'expose'=true})
+     * @Method("POST")
+     */
+    public function nuevoTicket(Request $request)
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, 'json');
+
+
+        $tickets = new Tickets();
+        $form = $this->createForm(TicketsType::class, $tickets);
+        $form->submit($data);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($tickets);
+            $em->flush();
+        }
+
+        return new JsonResponse(null, 400);
 
     }
 
